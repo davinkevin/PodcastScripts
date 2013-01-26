@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parameters>
+	<feedUrl>http://url/du/flux/rss/en/xml.xml</feedUrl>
+	<podcastName>Titre souhaité pour le podcast (utilisé pour la création du dossier)</podcastName>
+	<serverURL>http://url/du/serveur/http/local/pour/lexposition</serverURL>
+	<serverLocation>/dossier/local/de/stockage/du/podcast</serverLocation>
+</parameters>

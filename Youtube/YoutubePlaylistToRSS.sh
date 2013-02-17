@@ -33,6 +33,10 @@ chmod +w *.info.json
 curl -s "http://gdata.youtube.com/feeds/api/playlists/$YoutubePlaylist" -o "$YoutubePlaylist.description.xml"
 decalageDl=$((`xmlstarlet sel -N atom="http://www.w3.org/2005/Atom" -t -v "count(//atom:entry)" "$YoutubePlaylist.description.xml"`-10+1))
 
+if [ "$decalageDl" -le 0 ]; then
+	decalageDl=1;
+fi
+
 #Récupérations des $maxDownloads derniers éléments : 
 youtube-dl.py -c -w -o "%(upload_date)s-%(title)s.%(ext)s" --restrict-filenames --write-info-json --max-downloads $maxDownloads --playlist-start $decalageDl "http://www.youtube.com/playlist?list=$YoutubePlaylist"
 #youtube-dl.py -c -w -o "%(upload_date)s-%(title)s.%(ext)s" --restrict-filenames --write-info-json --skip-download --max-downloads $maxDownloads --playlist-start $decalageDl "http://www.youtube.com/playlist?list=$YoutubePlaylist"

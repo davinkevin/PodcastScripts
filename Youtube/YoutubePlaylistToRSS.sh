@@ -23,10 +23,10 @@ PodcastName=`echo Youtube - $title`
 PodcastNameHTML=`echo $PodcastName | perl -pe "s@ @%20@g"`
 
 #Création du dossier de destination s il n existe pas
-if [ ! -d "/home/###/Podcast/$PodcastName" ]; then
-    mkdir "/home/###/Podcast/$PodcastName"
+if [ ! -d "/home/$USER/Podcast/$PodcastName" ]; then
+    mkdir "/home/$USER/Podcast/$PodcastName"
 fi
-cd "/home/###/Podcast/$PodcastName"
+cd "/home/$USER/Podcast/$PodcastName"
 chmod +w *.info.json
 
 #Téléchargement des informations préliminaires

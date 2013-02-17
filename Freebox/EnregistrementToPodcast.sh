@@ -9,12 +9,12 @@ text_to_html() {
 	echo $text
 }
 
-cp /home/###/###/Freebox/* /home/###/Freebox/Enregistrements/ #Copie des images vers le dossiers de la freebox
+cp /home/$USER/###/Freebox/* /home/$USER/Freebox/Enregistrements/ #Copie des images vers le dossiers de la freebox
 serveur="http://url/du/dossier/Freebox/sur/le/serveur/http" #Element à modifier pour pointer vers le réel dossiers 
 
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
-cd /home/###/Freebox/Enregistrements/
+cd /home/$USER/Freebox/Enregistrements/
 for chaine in $(ls *.m2ts | cut -d'-' -f1 | sed -e "s@^\([^ ]*\)@\1@g" -e 's/^[ \t]*//;s/[ \t]*$//' | sort | uniq); do 
 	#echo Création de $chaine
 	chaineHTML=`text_to_html "$chaine"`
@@ -33,7 +33,7 @@ for chaine in $(ls *.m2ts | cut -d'-' -f1 | sed -e "s@^\([^ ]*\)@\1@g" -e 's/^[ 
 		titre=`echo ${emission#* - } | cut -d"-" -f1 | sed -e "s@^ *\([^ ]*\)@\1@g" -e 's/^[ \t]*//;s/[ \t]*$//'`
 		titreHTML=`text_to_html "$titre"`
 		pubdate=`echo $emission | sed -e "s@^.*\([0-9]\{2\}\)-\([0-9]\{2\}\)-\([0-9]\{4\}\) \([0-9]\{2\}\)h\([0-9]\{2\}\).*@\3-\2-\1 \4:\5@g" -e 's/^[ \t]*//;s/[ \t]*$//'`
-		description=`xmlstarlet sel -t -v "//channel[title='${chaine//\'/ }']/show[title='${titre//\'/ }']/description" /home/###/Podcast/Freebox/description.xml`
+		description=`xmlstarlet sel -t -v "//channel[title='${chaine//\'/ }']/show[title='${titre//\'/ }']/description" /home/$USER/Podcast/Freebox/description.xml`
 		xmlstarlet ed -L -N media="http://search.yahoo.com/mrss/" -s "//channel" -t elem -n item -v "" -s "//item[text()='']" -t attr -n currentnode -v "yes"  \
 			-s "//item[@currentnode='yes']" -t elem -n title -v "$titre" \
 			-s "//item[@currentnode='yes']" -t elem -n guid -v "$emission" \

@@ -64,19 +64,19 @@ for nomDuFichier in $(ls *.info.json -r ); do
 #		sizeEpisode=`cat "$nomDuFichier" | grep -o -e '"url": "[^"]*"' | perl -pe 's@.*: "([^"]*)"@\1@g' | xargs curl -s --head | grep Content-Length | perl -pe "s@.*: (.*)@\1@g"`
 #	fi
 
-	xmlstarlet ed -L -N media="http://search.yahoo.com/mrss/" -s "//channel" -t elem -n item -v "" -s "//item[text()='']" -t attr -n currentnode -v "yes" \
-		-s "//item[@currentnode='yes']" -t elem -n title -v "`cat "$nomDuFichier" | grep -o -e '"title": "[^"]*"' | perl -pe 's@.*: "([^"]*)"@\1@g' | ascii2uni -a A -q | xmlstarlet esc`" \
-		-s "//item[@currentnode='yes']" -t elem -n link -v "$serveur/$PodcastNameHTML/$PodcastFileHTML" \
-		-s "//item[@currentnode='yes']" -t elem -n guid -v "$serveur/$PodcastNameHTML/$podcastFileHTML" \
-		-s "//item[@currentnode='yes']" -t elem -n description -v "`cat "$nomDuFichier" | grep -o -e '"description": "[^"]*"' | perl -pe 's@.*: "([^"]*)"@\1@g' | ascii2uni -a A -q | xmlstarlet esc`" \
-		-s "//item[@currentnode='yes']" -t elem -n enclosure -v "" \
-		-s "//item[@currentnode='yes']/enclosure" -t attr -n url -v "$urlToEpisode" \
-		-s "//item[@currentnode='yes']/enclosure" -t attr -n length -v "$sizeEpisode" \
-		-s "//item[@currentnode='yes']/enclosure" -t attr -n type -v "video/${podcastFile#*.*}" \
-		-s "//item[@currentnode='yes']" -t elem -n pubDate -v "`cat "$nomDuFichier" | grep -o -e '"upload_date": "[^"]*"' | perl -pe 's@.*: "([^"]*)"@\1@g' | xargs date --rfc-2822 -d`" \
-		-s "//item[@currentnode='yes']" -t elem -n "thumbnail" -v "" \
-                -s "//item[@currentnode='yes']/thumbnail" -t attr -n "url" -v "`cat "$nomDuFichier" | grep -o -e '"thumbnail": "[^"]*"' | perl -pe 's@.*: "([^"]*)"@\1@g'`" \
-                -r "//thumbnail" -v "media:thumbnail" \
-		-d "//item[@currentnode='yes']/@currentnode" \
+	xmlstarlet ed -L -N media="http://search.yahoo.com/mrss/" -s "//channel" -t elem -n currentitem -v "" \
+		-s "//currentitem" -t elem -n title -v "`cat "$nomDuFichier" | grep -o -e '"title": "[^"]*"' | perl -pe 's@.*: "([^"]*)"@\1@g' | ascii2uni -a A -q | xmlstarlet esc`" \
+		-s "//currentitem" -t elem -n link -v "$serveur/$PodcastNameHTML/$PodcastFileHTML" \
+		-s "//currentitem" -t elem -n guid -v "$serveur/$PodcastNameHTML/$podcastFileHTML" \
+		-s "//currentitem" -t elem -n description -v "`cat "$nomDuFichier" | grep -o -e '"description": "[^"]*"' | perl -pe 's@.*: "([^"]*)"@\1@g' | ascii2uni -a A -q | xmlstarlet esc`" \
+		-s "//currentitem" -t elem -n enclosure -v "" \
+		-s "//currentitem/enclosure" -t attr -n url -v "$urlToEpisode" \
+		-s "//currentitem/enclosure" -t attr -n length -v "$sizeEpisode" \
+		-s "//currentitem/enclosure" -t attr -n type -v "video/${podcastFile#*.*}" \
+		-s "//currentitem" -t elem -n pubDate -v "`cat "$nomDuFichier" | grep -o -e '"upload_date": "[^"]*"' | perl -pe 's@.*: "([^"]*)"@\1@g' | xargs date --rfc-2822 -d`" \
+		-s "//currentitem" -t elem -n "thumbnail" -v "" \
+        -s "//currentitem/thumbnail" -t attr -n "url" -v "`cat "$nomDuFichier" | grep -o -e '"thumbnail": "[^"]*"' | perl -pe 's@.*: "([^"]*)"@\1@g'`" \
+        -r "//thumbnail" -v "media:thumbnail" \
+		-r "//currentitem" -v "item" \
 		"$PodcastName.xml"
 done
